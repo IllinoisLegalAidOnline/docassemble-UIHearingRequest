@@ -1,0 +1,87 @@
+metadata:
+  title: Respond to a lawsuit
+  short title: Respond to a lawsuit
+  comment: This program helps you respond to a lawsuit by telling the court and the other parties that you are participating in a court case. It can make a Jury Request if you want a jury and a judge to decide your case. It also makes an Answer that tells how you respond to what is written in the complaint or petition.
+  authors:
+    - Matt Newsted
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.ILAO:ilao-interview-framework.yml
+  - docassemble.ILAO:shared-basic-questions.yml
+---
+objects:
+  - users: ALPeopleList.using(there_are_any=True)
+---
+code: |
+  ilao_easy_form_title = "Unemployment benefits request for a hearing"
+  ilao_easy_form_url = "https://www.illinoislegalaid.org/legal-information/unemployment-benefits-request-hearing"
+  form_name = "Request for Reconsideration"
+  github_user = 'IllinoisLegalAidOnline'
+  github_repo_name = 'docassemble-UIHearingRequest'
+---
+# interview order block
+mandatory: True
+code: |
+  nav.set_section('section_intro')
+  sees_nav_bar
+  snapshot_start
+  how_to_use
+---
+code: |
+  stuff_to_snapshot = {
+  	'start_time': str(current_datetime().format_datetime()),
+  	'started_interview': True, 
+  	}
+
+  try:
+    stuff_to_snapshot['ip_address'] = device(ip=True)
+  except:
+    pass
+
+  stuff_to_snapshot['zip'] = showifdef('users[0].address.zip')
+
+  stuff_to_snapshot['downloaded_forms'] = showifdef('forms_assembling')
+  
+  store_variables_snapshot(
+  	data=stuff_to_snapshot, persistent=True
+  	)
+  snapshot_interview_state = True
+---
+code: |
+  snapshot_interview_state
+  snapshot_start = True  
+---
+code: |
+  reconsider('snapshot_interview_state')
+  snapshot_forms = True
+---
+id: welcome
+question: |
+  Unemployment benefits request for a hearing
+subquestion: |
+  Welcome to Illinois Legal Aid Online's **Unemployment benefits request for a hearing** Easy Form.
+
+  Placeholder  
+field: sees_nav_bar
+---
+id: instructions
+continue button field: how_to_use
+question: |
+  Instructions
+subquestion: |
+  To use this program you will need: 
+
+  * Placeholder
+
+  Set aside 5 to 10 minutes to finish this program. You can log in and save your work to continue later. 
+ 
+  ${ collapse_template(help_example) }  
+
+  Click on **{green words}** to learn what they mean. Some pages have a question mark in a circle ${ fa_icon("question-circle", color_css="#0dcaf0" ) } that helps explain things.
+---
+template: help_example
+subject: |
+  **You can click sections like this to show more information.**
+content: |  
+  This is an example of help. Click again to hide.
