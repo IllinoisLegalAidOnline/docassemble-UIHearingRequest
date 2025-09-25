@@ -1,14 +1,16 @@
 metadata:
-  title: Respond to a lawsuit
-  short title: Respond to a lawsuit
-  comment: This program helps you respond to a lawsuit by telling the court and the other parties that you are participating in a court case. It can make a Jury Request if you want a jury and a judge to decide your case. It also makes an Answer that tells how you respond to what is written in the complaint or petition.
+  title: Request for Reconsideration
+  short title: Request for Reconsideration
+  comment: This program is designed to help people who have been denied unemployment benefits by the Illinois Department of Employment Security. If you believe the decision was wrong, this tool guides you through answering a few questions to prepare the necessary forms to request a hearing. It will create a Request for Reconsideration and some instructions to help you challenge the denial and ask for a Referee hearing.
   authors:
     - Matt Newsted
+    - Jim Graszer
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ILAO:ilao-interview-framework.yml
   - docassemble.ILAO:shared-basic-questions.yml
+  - ui_hearing_request_review.yml
 ---
 objects:
   - users: ALPeopleList.using(there_are_any=True)
@@ -20,13 +22,50 @@ code: |
   github_user = 'IllinoisLegalAidOnline'
   github_repo_name = 'docassemble-UIHearingRequest'
 ---
-# interview order block
+sections:
+  - section_intro: Start
+  - section_decision: UI decision
+  - section_about: About you
+  - section_request: Reconsideration request
+  - section_download: Download
+---
+#################### Interview order #####################
 mandatory: True
 code: |
   nav.set_section('section_intro')
   sees_nav_bar
   snapshot_start
+  set_progress(5)
   how_to_use
+  accept_terms
+
+  nav.set_section('section_decision')
+  set_progress(15)
+  about_ui_bens
+  if received_finding_letter == False:
+    no_finding_letter
+  decision_date
+  check_late_request
+  if decision_diff.days >= 30:
+    late_request
+  appeal_reason
+
+  nav.set_section('section_about')
+  set_progress(60)
+  users[0].name.first
+  users[0].phone_number
+  users[0].id_or_ssn
+
+  nav.set_section('section_request')
+  set_progress(90)
+  request_date
+  next_steps
+
+  set_progress(100)
+  nav.set_section('section_download')
+  forms_assembling
+  snapshot_forms
+  get_docs_screen
 ---
 code: |
   stuff_to_snapshot = {
@@ -60,9 +99,12 @@ id: welcome
 question: |
   Unemployment benefits request for a hearing
 subquestion: |
-  Welcome to Illinois Legal Aid Online's **Unemployment benefits request for a hearing** Easy Form.
+  Welcome to Illinois Legal Aid Online's **{ ilao_easy_form_title }** Easy Form.
 
-  Placeholder  
+  If you were denied unemployment benefits, this program will create a form to help you ask the Illinois Department of Employment Security (IDES) to reconsider the decision made by the Claims Adjudicator.
+
+  To learn more, read ILAO's article about [being denied unemployment insurance](https://www.illinoislegalaid.org/node/32541)."
+
 field: sees_nav_bar
 ---
 id: instructions
@@ -72,8 +114,9 @@ question: |
 subquestion: |
   To use this program you will need: 
 
-  * Placeholder
-
+  * IDES should have mailed you a **UI Finding Letter**.
+  * Your **Claimant ID** (printed on the letter) or the last 4 digits of your Social Security Number.
+  
   Set aside 5 to 10 minutes to finish this program. You can log in and save your work to continue later. 
  
   ${ collapse_template(help_example) }  
@@ -85,3 +128,235 @@ subject: |
   **You can click sections like this to show more information.**
 content: |  
   This is an example of help. Click again to hide.
+---
+########################## UI decision ######################
+id: about ui benefits
+continue button field: about_ui_bens
+question: |
+  About unemployment insurance appeals
+subquestion: |
+  If you are denied unemployment benefits, you have 3 opportunities to appeal:
+
+  * File an appeal (a request to reconsider) to be heard by an IDES Referee. This program makes the form you need.
+  * After your hearing, if you don't agree with the Referee's decision, file an appeal with the Board of Review. Use a different [**Easy Form to appeal to the Board of Review**](www.illinoislegalaid.org/node/30846).
+  * Finally, if you don't agree with the Board of Review's decision, file an Administrative Review Action in Circuit Court.
+
+  **Note:** IDES offers free legal services to represent claimants in their unemployment benefits appeals. See the IDES Legal Service Program to find out if you qualify.
+---
+id: received finding letter
+question: |
+  Did you get a UI Finding Letter from claims adjudicator?
+subquestion: |
+  This is a letter from a claims adjudicator at IDES.
+fields:
+  - no label: received_finding_letter
+    datatype: yesnoradio
+---
+id: no finding letter
+event: no_finding_letter
+question: |
+  Sorry
+subquestion: |
+  You must have received a UI Finding Letter from IDES to request reconsideration.
+
+  Learn more about being denied unemployment insurance (LINK).
+
+  You may want to talk with a lawyer to discuss your options. Use [**Get Legal Help**](https://www.illinoislegalaid.org/get-legal-help) to find free or low-cost legal services in your area.
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+id: finding letter date
+question: |
+  When was finding letter dated?
+fields:
+  - no label: decision_date
+    datatype: ThreePartsDate
+    alMax: ${ today().format("yyyy-MM-dd") }
+---
+code: |
+  decision_diff = date_difference(decision_date, today())
+  check_late_request = True
+---
+id: late request
+question: |
+  Warning: Late request
+subquestion: |
+  You have 30 days from the date on the decision to send in your request. Based on the date of the decision (${ decision_date.format("MM/dd/yyyy") }), your appeal is late.
+
+  You can still request reconsideration, but it might not be accepted. You may want to talk with a lawyer about your options. Use [**Get Legal Help**](https://www.illinoislegalaid.org/get-legal-help) to find free or low-cost legal services in your area.
+
+  Click **Back** if you want to change the date of the Claims Adjudicator's decision. Or you can click **Next** to make your request even though it is late.
+continue button field: late_request
+---
+template: ides_legal_services_help	
+subject: |
+  Get legal help from IDES	
+content: |
+  IDES has a [**legal services program**](https://ides.illinois.gov/resources/legal-services-program/legal-services.html) that can give you 1 hour of free legal help.
+---
+id: appeal reason
+question: |
+  Why are you appealing the ${ decision_date.format("MMMM d, YYYY") } decision?
+subquestion: |
+  Explain why you think the claims adjudicator's decision was wrong.
+
+  For example, you could say:
+  > *The decision letter I received says I was fired for misconduct. However, my employer refused to give me proper safety equipment. My job involves working with hazardous materials. When I told my boss I would not handle the waste without safety equipment, I was fired.*
+
+  Learn more about getting unemployment benefits if:
+  
+  * [You quit your job](https://www.illinoislegalaid.org/node/32111), or
+  * [You were fired](https://www.illinoislegalaid.org/node/32491).
+
+  ${ collapse_template(ides_legal_services_help) }  
+fields:
+  - no label: appeal_reason
+    input type: area
+    rows: 15
+    maxlength: 1000
+---
+########################## UI decision ######################
+id: your name
+sets:
+  - users[0].name.first
+  - users[0].name.last
+  - users[0].name.middle
+  - users[0].name.suffix
+question: |
+  What is your name?
+fields:
+  - code: |
+      users[0].name_fields()
+---
+id: your contact information
+question: |
+  What is your phone number?
+fields:  
+  - Phone number: users[0].phone_number
+    datatype: al_international_phone
+    required: False
+---
+id: user last 4 ssn
+question: |
+  Claimant ID
+subquestion: |
+  Enter your Claimant ID or the last 4 digits of your Social Security Number. This is used by IDES to identify your UI benefits claim.
+
+  ${ collapse_template(locating_claimant_id_example) }  
+fields:
+  - no label: users[0].id_or_ssn
+    datatype: number
+    min: 0
+---
+template: locating_claimant_id_example
+subject: |
+  **Click here for additional help locating Claimant ID**
+content: |  
+  The Claimant ID can be found in the upper-right of the UI Finding letter, as well as other letters and emails received from IDES.
+  
+  [FILE findingletterexample.jpeg, 100%, Locating a Claimant ID on IDES letter]
+
+  Source: [**IDES**](https://ides.illinois.gov/unemployment/fraud-id-theft/reporting-unemployment-insurance-fraud/finding-claimant-id.html)
+---
+####################### Reconsideration request ######################
+id: request date
+question: |
+  When you will send your request?
+subquestion: |
+  If you don't know this now, leave it blank. Be sure to add the date when you sign the request.
+
+  You can mail, fax, or hand-deliver your request. Click **Next** to learn more.
+fields:
+  - no label: request_date
+    datatype: ThreePartsDate
+    alMin: ${ today().format("yyyy-MM-dd") }
+    required: False
+---
+id: next steps
+question: |
+  Next steps
+subquestion: |
+  After you download your request, sign it. Add the date if needed.
+
+  Mail, fax or deliver this to your local IDES office. The address and fax number appear on the Finding or Determination. You can also use the [**IDES Office Locator**](https://ides.illinois.gov/about/locations.html).
+
+  **Note:** Continue to certify benefits by Tele-Serve or online for each two-week period you are unemployed during appeal process.
+continue button field: next_steps
+---
+###################### DOWNLOAD SECTION #########################
+id: forms assembling
+continue button field: forms_assembling
+question: |
+  Almost done
+subquestion: |
+  After you click **Next**, it may take a few moments to finish making your forms.
+  
+  ###### You do not need to refresh your screen. Hang in there!
+  
+  [NEWLINE]
+---
+id: get docs screen
+event: get_docs_screen
+question: |
+  Download
+subquestion: |
+  Your form is ready. View and download your form below. Click **Make changes** to fix any mistakes.
+
+  This program does not deliver your *${form_name}* to the other party in your case. You will need to do that yourself.
+
+  ${ action_button_html(url_action('review_answers'), label=':edit: Make changes', color='success', size="md") }
+
+  ${ al_user_bundle.download_list_html() }
+
+  [NEWLINE]
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+
+
+  **Note:** This program does not deliver your *${form_name}* to the other party in your case. You will need to do that yourself.
+  
+  Thank you for using ILAO Easy Forms!
+under: |
+  % if not user_logged_in():
+  [${fa_icon("sign-in-alt", color="#0079d0", size="sm")} **Sign-in**](${url_of('login', next=interview_url())}) or [**create**](${url_of('register', next=interview_url())}) an ILAO Easy Form account to save your progress (optional).
+  % endif
+
+  ${ action_button_html(interview_url(i="docassemble.ILAO:feedback.yml", easy_form_interview=ilao_easy_form_url, easy_form_title=ilao_easy_form_title, easy_form_page=current_context().question_id, easy_form_variable=current_context().variable, local=False,reset=1), label=':comment: Was this program helpful?', color="#181c36", size="md", new_window=True) }
+---
+###################### ATTACHMENTS ##########################
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, ides_referee_request], filename="completed_referee_request.pdf", title="All forms", enabled=True)
+---
+objects:
+  - instructions: ALDocument.using(title="Instructions", filename="instructions.pdf", enabled=True, has_addendum=False)
+  - ides_referee_request: ALDocument.using(title="Request for Reconsideration", filename="ides_referee_request.pdf", enabled=True, has_addendum=False)
+---
+attachment:
+  variable name: instructions[i]
+  name: instructions
+  filename: instructions
+  skip undefined: True
+  docx template file: instructions.docx
+---
+attachment:
+  - name: ides_referee_request
+    variable name: ides_referee_request[i]
+    filename: ides_referee_request
+    pdf template file: ides_referee_request.pdf
+    skip undefined: True
+    editable: False
+    fields:
+      - "user_last": ${ users[0].name.last }  
+      - "user_first": ${ users[0].name.first }
+      - "user_middle": ${ users[0].name.middle[:1] }
+      - "claimant_id": ${ int(users[0].id_or_ssn) }
+      - "Claimant": True
+      - "decision_date": ${ decision_date.format("MM/dd/yyyy") }
+      - "reason": 'the denial of unemployment benefits'
+      - "reason_continued": ${ 'to ' + users[0].name_full() }
+      - "appeal": ${ appeal_reason }
+      # signature not electronic
+      - "signature_date": ${ request_date.format("MM/dd/yyyy") }
+      - "user_name": ${ users[0].name_full() }
+      - "phone_number": ${ phone_number_formatted(users[0].phone_number) }

@@ -44,12 +44,12 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.UIHearingRequest',
-      version='0.0.1',
+      version='0.1.0',
       description=('A docassemble extension.'),
       long_description='# docassemble.UIHearingRequest\n\nA docassemble extension.\n\n## Author\n\nMatt Newsted, mnewsted@illinoislegalaid.org\n\n',
       long_description_content_type='text/markdown',
-      author='Matt Newsted',
-      author_email='mnewsted@illinoislegalaid.org',
+      author='Jim Graszer',
+      author_email='jim@lemmalegal.com',
       license='The MIT License (MIT)',
       url='https://docassemble.org',
       packages=find_namespace_packages(),
