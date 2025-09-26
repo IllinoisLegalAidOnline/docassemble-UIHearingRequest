@@ -103,7 +103,7 @@ subquestion: |
 
   If you were denied unemployment benefits, this program will create a form to help you ask the Illinois Department of Employment Security (IDES) to reconsider the decision made by the Claims Adjudicator.
 
-  To learn more, read ILAO's article about [being denied unemployment insurance](https://www.illinoislegalaid.org/node/32541)."
+  To learn more, read ILAO's article about [being denied unemployment insurance](https://www.illinoislegalaid.org/node/32541).
 
 field: sees_nav_bar
 ---
@@ -211,6 +211,8 @@ subquestion: |
 
   ${ collapse_template(ides_legal_services_help) }  
 fields:
+  - note: |
+      **Note:** The form has room for about **1,300 characters** including spaces.
   - no label: appeal_reason
     input type: area
     rows: 18
@@ -218,24 +220,33 @@ fields:
 script: |
   <script>
     $(document).on('daPageLoad', function() {
+      var maxLength = 1300; // This should match the textarea maxlength
       var textareas = document.querySelectorAll('textarea');
       textareas.forEach(function (textarea) {
-          var counterId = textarea.id + "_counter";
-          if (document.getElementById(counterId)) return;
+        var counterId = textarea.id + "_counter";
+        if (document.getElementById(counterId)) return;
 
-          var counter = document.createElement("div");
-          counter.id = counterId;
-          counter.style.textAlign = "right";
-          counter.style.fontSize = "1em";
-          counter.style.color = "#555";
+        var counter = document.createElement("div");
+        counter.id = counterId;
+        counter.style.textAlign = "right";
+        counter.style.fontSize = "1em";
+        counter.style.color = "#555";
 
-          function updateCounter() {
-            counter.textContent = textarea.value.length + "/1300"; // make sure to match maxLength attribute
+        function updateCounter() {
+          var len = textarea.value.length;
+          counter.textContent = len + "/" + maxLength;
+          if (len > maxLength) {
+            counter.style.fontWeight = "bold";
+            counter.style.color = "#000";
+          } else {
+            counter.style.fontWeight = "normal";
+            counter.style.color = "#555";
           }
+        }
 
-          textarea.parentNode.appendChild(counter);
-          textarea.addEventListener("input", updateCounter);
-          updateCounter();
+        textarea.parentNode.appendChild(counter);
+        textarea.addEventListener("input", updateCounter);
+        updateCounter();
       });
     });
   </script>
@@ -272,7 +283,7 @@ fields:
   - Claimant ID or last 4 digits of SSN: users[0].id_or_ssn
     datatype: number
     minlength: 4
-    maxlength: 25
+    maxlength: 15
 ---
 template: locating_claimant_id_example
 subject: |
@@ -338,7 +349,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-  **Note:** This program <u>**does not deliver**</u> your *${form_name}* to the other party in your case. You will need to do that yourself.
+  **Note:** This program **does not deliver** your *${form_name}* to the other party in your case. You will need to do that yourself.
   
   Thank you for using ILAO Easy Forms!
 under: |
