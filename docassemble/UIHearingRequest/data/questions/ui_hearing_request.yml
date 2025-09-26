@@ -1,10 +1,10 @@
 metadata:
-  title: Request for Reconsideration
-  short title: Request for Reconsideration
+  title: Unemployment hearing request
+  short title: Unemployment hearing request
   comment: This program is designed to help people who have been denied unemployment benefits by the Illinois Department of Employment Security. If you believe the decision was wrong, this tool guides you through answering a few questions to prepare the necessary forms to request a hearing. It will create a Request for Reconsideration and some instructions to help you challenge the denial and ask for a Referee hearing.
   authors:
-    - Matt Newsted
     - Jim Graszer
+    - Matt Newsted
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
@@ -18,7 +18,7 @@ objects:
 code: |
   ilao_easy_form_title = "Unemployment benefits request for a hearing"
   ilao_easy_form_url = "https://www.illinoislegalaid.org/legal-information/unemployment-benefits-request-hearing"
-  form_name = "Request for Reconsideration"
+  form_name = "Unemployment hearing request"
   github_user = 'IllinoisLegalAidOnline'
   github_repo_name = 'docassemble-UIHearingRequest'
 ---
@@ -99,7 +99,7 @@ id: welcome
 question: |
   Unemployment benefits request for a hearing
 subquestion: |
-  Welcome to Illinois Legal Aid Online's **{ ilao_easy_form_title }** Easy Form.
+  Welcome to Illinois Legal Aid Online's **${ ilao_easy_form_title }** Easy Form.
 
   If you were denied unemployment benefits, this program will create a form to help you ask the Illinois Department of Employment Security (IDES) to reconsider the decision made by the Claims Adjudicator.
 
@@ -138,10 +138,10 @@ subquestion: |
   If you are denied unemployment benefits, you have 3 opportunities to appeal:
 
   * File an appeal (a request to reconsider) to be heard by an IDES Referee. This program makes the form you need.
-  * After your hearing, if you don't agree with the Referee's decision, file an appeal with the Board of Review. Use a different [**Easy Form to appeal to the Board of Review**](www.illinoislegalaid.org/node/30846).
+  * After your hearing, if you don't agree with the Referee's decision, file an appeal with the Board of Review. Use a different [**Easy Form to appeal to the Board of Review**](https://www.illinoislegalaid.org/node/30846).
   * Finally, if you don't agree with the Board of Review's decision, file an Administrative Review Action in Circuit Court.
 
-  **Note:** IDES offers free legal services to represent claimants in their unemployment benefits appeals. See the IDES Legal Service Program to find out if you qualify.
+  **Note:** IDES offers free legal service to represent claimants in their unemployment benefits appeals. See the [**IDES Legal Services Program**](https://ides.illinois.gov/resources/legal-services-program/legal-services.html) to find out if you qualify.
 ---
 id: received finding letter
 question: |
@@ -213,8 +213,32 @@ subquestion: |
 fields:
   - no label: appeal_reason
     input type: area
-    rows: 15
-    maxlength: 1000
+    rows: 18
+    maxlength: 1300
+script: |
+  <script>
+    $(document).on('daPageLoad', function() {
+      var textareas = document.querySelectorAll('textarea');
+      textareas.forEach(function (textarea) {
+          var counterId = textarea.id + "_counter";
+          if (document.getElementById(counterId)) return;
+
+          var counter = document.createElement("div");
+          counter.id = counterId;
+          counter.style.textAlign = "right";
+          counter.style.fontSize = "1em";
+          counter.style.color = "#555";
+
+          function updateCounter() {
+            counter.textContent = textarea.value.length + "/1300"; // make sure to match maxLength attribute
+          }
+
+          textarea.parentNode.appendChild(counter);
+          textarea.addEventListener("input", updateCounter);
+          updateCounter();
+      });
+    });
+  </script>
 ---
 ########################## UI decision ######################
 id: your name
@@ -245,9 +269,10 @@ subquestion: |
 
   ${ collapse_template(locating_claimant_id_example) }  
 fields:
-  - no label: users[0].id_or_ssn
+  - Claimant ID or last 4 digits of SSN: users[0].id_or_ssn
     datatype: number
-    min: 0
+    minlength: 4
+    maxlength: 25
 ---
 template: locating_claimant_id_example
 subject: |
@@ -313,8 +338,7 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
-
-  **Note:** This program does not deliver your *${form_name}* to the other party in your case. You will need to do that yourself.
+  **Note:** This program <u>**does not deliver**</u> your *${form_name}* to the other party in your case. You will need to do that yourself.
   
   Thank you for using ILAO Easy Forms!
 under: |
@@ -324,13 +348,29 @@ under: |
 
   ${ action_button_html(interview_url(i="docassemble.ILAO:feedback.yml", easy_form_interview=ilao_easy_form_url, easy_form_title=ilao_easy_form_title, easy_form_page=current_context().question_id, easy_form_variable=current_context().variable, local=False,reset=1), label=':comment: Was this program helpful?', color="#181c36", size="md", new_window=True) }
 ---
+generic object: ALDocumentBundle
+template: x.get_email_copy
+content: |
+  Send a copy of your forms to your email
+---
+generic object: ALDocumentBundle
+template: x.send_email_template
+subject: |
+  ${ form_name } forms
+content: |
+  Your forms are attached.
+  
+  Thanks for using ILAO Easy Forms!
+  
+  [Illinois Legal Aid Online](https://www.illinoislegalaid.org)
+---
 ###################### ATTACHMENTS ##########################
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[instructions, ides_referee_request], filename="completed_referee_request.pdf", title="All forms", enabled=True)
 ---
 objects:
   - instructions: ALDocument.using(title="Instructions", filename="instructions.pdf", enabled=True, has_addendum=False)
-  - ides_referee_request: ALDocument.using(title="Request for Reconsideration", filename="ides_referee_request.pdf", enabled=True, has_addendum=False)
+  - ides_referee_request: ALDocument.using(title=form_name, filename="ides_referee_request.pdf", enabled=True, has_addendum=False)
 ---
 attachment:
   variable name: instructions[i]

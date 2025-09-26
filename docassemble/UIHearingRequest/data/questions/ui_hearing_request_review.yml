@@ -7,7 +7,7 @@ subquestion: |
   Edit your answers below.
 review:
   - note: |
-     <h4>UI Decision</h4>
+     <h4>UI decision</h4>
   - Edit: received_finding_letter
     button: |
       **UI finding letter:**
@@ -56,7 +56,7 @@ review:
 id: UI decision review screen
 event: section_decision
 question: |
-  UI decision
+  UI decision details
 review:
   - Edit: received_finding_letter
     button: |
@@ -99,7 +99,7 @@ review:
 id: Reconsideration request review screen
 event: section_request
 question: |
-  Reconsideration request
+  Reconsideration request details
 review:
   - Edit: request_date
     button: |
