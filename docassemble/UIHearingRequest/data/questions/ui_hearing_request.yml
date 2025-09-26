@@ -18,7 +18,7 @@ objects:
 code: |
   ilao_easy_form_title = "Unemployment benefits request for a hearing"
   ilao_easy_form_url = "https://www.illinoislegalaid.org/legal-information/unemployment-benefits-request-hearing"
-  form_name = "Unemployment hearing request"
+  form_name = "Request for reconsideration"
   github_user = 'IllinoisLegalAidOnline'
   github_repo_name = 'docassemble-UIHearingRequest'
 ---
@@ -356,7 +356,7 @@ content: |
 generic object: ALDocumentBundle
 template: x.send_email_template
 subject: |
-  ${ form_name } forms
+  Unemployment hearing request forms
 content: |
   Your forms are attached.
   
