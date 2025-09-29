@@ -21,6 +21,16 @@ review:
       **Appeal reason:**
 
       ${ appeal_reason }
+  - Edit: request_date
+    button: |
+      **Date of request:**
+      % if request_date:
+      ${ request_date.format("MM/dd/yyyy") }
+      % else:
+      None entered
+
+      Be sure to add the date to your request when you sign it.
+      % endif
   - note: |
      <h4>About You</h4>
   - Edit: users[0].name.first
@@ -39,24 +49,12 @@ review:
     button: |
       **Claimant ID:**
       ${ int(users[0].id_or_ssn) }
-  - note: |
-     <h4>Reconsideration request</h4>
-  - Edit: request_date
-    button: |
-      **Date of request:**
-      % if request_date:
-      ${ request_date.format("MM/dd/yyyy") }
-      % else:
-      N/A
-
-      Be sure to add the date you sign your request and mail it.
-      % endif
 ---
-#################### SECTION REVIEW - UI DECISION #########################
-id: UI decision review screen
+#################### SECTION REVIEW - UNEMPLOYMENT BENEFITS DECISION #########################
+id: Unemployment benefits decision review screen
 event: section_decision
 question: |
-  UI decision details
+  Unemployment benefits decision details
 review:
   - Edit: received_finding_letter
     button: |
@@ -71,6 +69,16 @@ review:
       **Appeal reason:**
 
       ${ appeal_reason }
+  - Edit: request_date
+    button: |
+      **Date of request:**
+      % if request_date:
+      ${ request_date.format("MM/dd/yyyy") }
+      % else:
+      None entered
+
+      Be sure to add the date to your request when you sign it.
+      % endif
 ---
 #################### SECTION REVIEW - ABOUT #########################
 id: About you review screen
@@ -94,21 +102,4 @@ review:
     button: |
       **Claimant ID:**
       ${ int(users[0].id_or_ssn) }
----
-#################### SECTION REVIEW - REQUEST #########################
-id: Reconsideration request review screen
-event: section_request
-question: |
-  Reconsideration request details
-review:
-  - Edit: request_date
-    button: |
-      **Date of request:**
-      % if request_date:
-      ${ request_date.format("MM/dd/yyyy") }
-      % else:
-      N/A
-
-      Be sure to add the date you sign your request and mail it.
-      % endif
 ---
