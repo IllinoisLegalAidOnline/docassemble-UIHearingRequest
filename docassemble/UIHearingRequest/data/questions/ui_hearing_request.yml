@@ -166,7 +166,7 @@ buttons:
 ---
 id: finding letter date
 question: |
-  When was finding letter dated?
+  When was the finding letter dated?
 fields:
   - Finding letter date: decision_date
     datatype: ThreePartsDate
