@@ -111,8 +111,8 @@ question: |
 subquestion: |
   To use this program you will need:
 
-  * A **Finding letter** from IDES, and
-  * Your **Claimant ID** (printed on the letter) or the last 4 digits of your Social Security Number.
+  * A Finding letter from IDES, and
+  * Your Claimant ID (printed on the letter) or the last 4 digits of your Social Security Number.
   
   Set aside 5 to 10 minutes to finish this program. You can log in and save your work to continue later. 
  
@@ -168,7 +168,7 @@ id: finding letter date
 question: |
   When was finding letter dated?
 fields:
-  - no label: decision_date
+  - Finding letter date: decision_date
     datatype: ThreePartsDate
     alMax: ${ today().format("yyyy-MM-dd") }
 ---
@@ -187,9 +187,16 @@ subquestion: |
   Click **Back** if you want to change the date of the claims adjudicator's decision. Or you can click **Next** to make your request even though it is late.
 continue button field: late_request
 ---
+template: request_example_help	
+subject: |
+  **Can I see an example?**	
+content: |
+  For example, you could say: "The decision letter I received says I was fired for misconduct. However, my employer refused to give me proper safety equipment. My job involves working with hazardous materials. When I told my boss I would not handle the waste without safety equipment, I was fired." 
+---
+### currently unused ###
 template: ides_legal_services_help	
 subject: |
-  Get legal help from IDES	
+  **Get legal help from IDES**	
 content: |
   IDES has a [**legal services program**](https://ides.illinois.gov/resources/legal-services-program/legal-services.html) that can give you 1 hour of free legal help.
 ---
@@ -197,17 +204,13 @@ id: appeal reason
 question: |
   Why are you appealing the ${ decision_date.format("MMMM d, YYYY") } decision?
 subquestion: |
-  Explain why you think the claims adjudicator's decision was wrong.
+  Explain why you think the claims adjudicator's decision was wrong. You might want to focus on different things whether you left your job voluntarily (you quit) or involuntarily (you were fired or laid off). You and the employer might have different understandings about what happened. That is why it is important to explain things from your perspective.
 
-  For example, you could say:
-  > *The decision letter I received says I was fired for misconduct. However, my employer refused to give me proper safety equipment. My job involves working with hazardous materials. When I told my boss I would not handle the waste without safety equipment, I was fired.*
+  If you **quit**, to receive unemployment benefits you must show that you left for a good reason. It can be helpful to show what you did to try to fix problems before you quit. See ILAO's article about [getting unemployment benefits if you quit your job](https://www.illinoislegalaid.org/node/32111).
 
-  Learn more about getting unemployment benefits if:
+  If you were **fired**, your employer has to show that you were fired for misconduct. If you did not do what the employer said you did, you can explain that. Or you can explain how what you did was not misconduct. To learn more, see ILAO's article about [getting unemployment benefits if you were fired](https://www.illinoislegalaid.org/node/32491).
   
-  * [You quit your job](https://www.illinoislegalaid.org/node/32111), or
-  * [You were fired](https://www.illinoislegalaid.org/node/32491).
-
-  ${ collapse_template(ides_legal_services_help) }  
+  ${ collapse_template(request_example_help) }  
 
   **Note:** The form has room for about **1,300 characters** including spaces.
 fields:
@@ -264,10 +267,11 @@ fields:
 id: your contact information
 question: |
   What is your phone number?
+subquestion: |
+  Most referee hearings are conducted by phone.
 fields:  
   - Phone number: users[0].phone_number
     datatype: al_international_phone
-    required: False
 ---
 id: user last 4 ssn
 question: |
