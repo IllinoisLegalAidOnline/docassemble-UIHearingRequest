@@ -133,19 +133,19 @@ question: |
 subquestion: |
   If you are denied unemployment benefits, you have 3 opportunities to appeal:
 
-  1. File an appeal (a Request for Reconsideration) to be heard by an IDES referee. **This program makes a Request for Reconsideration.**
+  1. File an appeal (a Request for Reconsideration) to have your claim reviewed by an IDES referee. **This program makes a Request for Reconsideration.**
   
   2. After your hearing, if you don't agree with the referee's decision, file an appeal with the Board of Review. Use a different [**Easy Form to appeal to the Board of Review**](https://www.illinoislegalaid.org/node/30846).
   
-  3. Finally, if you don't agree with the Board of Review's decision, file an Administrative Review Action in Circuit Court.
+  3. Finally, if you don't agree with the Board of Review's decision, file an administrative review action in Circuit Court. To learn more, read ILAO's article, [How to file an adminstrative review action for unemployment insurance](https://www.illinoislegalaid.org/node/32476). 
 
-  **Note:** IDES offers free legal service to represent claimants in their unemployment benefits appeals. See the [**IDES Legal Services Program**](https://ides.illinois.gov/resources/legal-services-program/legal-services.html) to find out if you qualify.
+  **Note:** IDES offers free legal services, including representation in some cases, to people who are appealing an unemployment benefits decision. Visit the [IDES Legal Services Program]((https://ides.illinois.gov/resources/legal-services-program/legal-services.html)) to see if you qualify.
 ---
 id: received finding letter
 question: |
   Did you get a Finding letter from IDES?
 subquestion: |
-  This is a letter from a claims adjudicator at the Illinois Department of Employment Security (IDES).
+  This letter comes from a claims adjudicator at the Illinois Department of Employment Security (IDES). It tells you whether you have enough work history to qualify for benefits and how much you could receive.
 fields:
   - no label: received_finding_letter
     datatype: yesnoradio
@@ -204,11 +204,10 @@ id: appeal reason
 question: |
   Why are you appealing the ${ decision_date.format("MMMM d, YYYY") } decision?
 subquestion: |
-  Explain why you think the claims adjudicator's decision was wrong. You might want to focus on different things whether you left your job voluntarily (you quit) or involuntarily (you were fired or laid off). You and the employer might have different understandings about what happened. That is why it is important to explain things from your perspective.
+  Explain why you think the claims adjudicator’s decision was wrong. You and your employer might not agree about what happened, so it’s important to clearly tell your side of the story. What you include will depend on whether you quit your job or were fired or laid off.
 
-  If you **quit**, to receive unemployment benefits you must show that you left for a good reason. It can be helpful to show what you did to try to fix problems before you quit. See ILAO's article about [getting unemployment benefits if you quit your job](https://www.illinoislegalaid.org/node/32111).
-
-  If you were **fired**, your employer has to show that you were fired for misconduct. If you did not do what the employer said you did, you can explain that. Or you can explain how what you did was not misconduct. To learn more, see ILAO's article about [getting unemployment benefits if you were fired](https://www.illinoislegalaid.org/node/32491).
+  * **If you quit**: You must show that you had a good reason for leaving your job. Explain what problems led you to quit and what you did to try to fix them before you left. To learn more, see ILAO’s article about [**getting unemployment benefits if you quit your job**](https://www.illinoislegalaid.org/node/32111).
+  * **If you were fired**: Your employer must show that you were fired for misconduct. If you did not do what your employer said you did, explain that. Or explain why what you did was not misconduct. To learn more, see ILAO’s article about [**getting unemployment benefits if you were fired**](https://www.illinoislegalaid.org/node/32491).
   
   ${ collapse_template(request_example_help) }  
 
@@ -298,7 +297,7 @@ id: request date
 question: |
   When you will send your request?
 subquestion: |
-  After you download your request, you can mail, fax or deliver it to your local IDES office. The address and fax number appear on the Finding letter or Determination. You can also use the [**IDES Office Locator**](https://ides.illinois.gov/about/locations.html).
+  After you download your request form, you can mail, fax or deliver it to your local IDES office. The address and fax number appear on the Finding letter. You can also use the [**IDES Office Locator**](https://ides.illinois.gov/about/locations.html).
 
   **Note:** Be sure to send your request within 30 days of when your Finding letter was dated (${decision_date}).
 fields:
