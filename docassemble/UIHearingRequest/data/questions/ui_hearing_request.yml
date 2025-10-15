@@ -50,13 +50,14 @@ code: |
     late_request
   appeal_reason
   request_date
-  recert_reminder
+  documents_reminder
   
   nav.set_section('section_about')
   set_progress(75)
   users[0].name.first
   users[0].phone_number
   users[0].id_or_ssn
+  recert_reminder
 
   set_progress(100)
   nav.set_section('section_download')
@@ -166,7 +167,7 @@ buttons:
 ---
 id: finding letter date
 question: |
-  When was the finding letter dated?
+  When was the Finding letter dated?
 fields:
   - Finding letter date: decision_date
     datatype: ThreePartsDate
@@ -299,7 +300,7 @@ question: |
 subquestion: |
   After you download your request form, you can mail, fax or deliver it to your local IDES office. The address and fax number appear on the Finding letter. You can also use the [**IDES Office Locator**](https://ides.illinois.gov/about/locations.html).
 
-  **Note:** Be sure to send your request within 30 days of when your Finding letter was dated (${decision_date}).
+  **Note:** Be sure to send your request within 30 days of when your Finding letter was dated (${decision_date}). Otherwise, your request will be denied as bing untimely, and the claim adjudicator's denial will stand.
 fields:
   - Date you will send your request: request_date
     datatype: ThreePartsDate
@@ -308,11 +309,30 @@ fields:
   - note: |
       If you don't know this now, leave it blank. Be sure to add the date when you sign the request.
 ---
+id: any additional documents
+continue button field: documents_reminder
+question: |
+  Additional documents and reviewing your file
+subquestion: |
+  You can include other documents with your request to help prove your claim.
+
+  **Important:** You need to send a copy of these documents to IDES and to your former employer. If the referee and your employer have not received a copy of these documents at least 24 hours before the hearing, they may not be considered at the hearing.
+
+  Some documents that may be helpful depending on your situation are:
+
+    * Your medical records,
+    * A letter from your doctor or another healthcare professional,
+    * Phone records, in cases where the employer claims you were absent without calling in, or
+    * Any other document you think supports your version of events (or your story).
+
+  You also have a right to review your file before the referee hearing. Call IDES at the number on your Finding Letter or contact your local IDES office using the [**IDES Office Locator**](https://ides.illinois.gov/about/locations.html) to learn how.
+
+  **Note:** IDES offers free legal services, including representation in some cases, to people who are appealing an unemployment benefits decision. Visit the [IDES Legal Services Program]((https://ides.illinois.gov/resources/legal-services-program/legal-services.html)) to see if you qualify.
+---
 id: recertification reminder
 question: |
-  Important
+  Remember to recertify
 subquestion: |
-
   <div class="alert alert-info ilao-info" role="alert">
     <h6 class="alert-heading">Remember to re-certify</h6>
     <p>During the appeal process, you must continue to certify that you are eligible for unemployment benefits for each two-week period you are unemployed.</p>
